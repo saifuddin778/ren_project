@@ -21,4 +21,4 @@ def get_coords():
 	f.write(json.dumps(geos))
 	f.close()
 
-get_coords()
+#get_coords()
