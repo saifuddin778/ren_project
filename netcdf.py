@@ -72,8 +72,13 @@ class netcdf(object):
 			h = var[:,iy,ix]
 			points = []
 			for _, i in enumerate(h):
-				print float(i), loc['name']
-				points.append(float(i))
+				p = np.isnan(float(i))
+				if not p:
+					#print float(i), loc['name']
+					points.append(float(i))
+				else:
+					print loc['name'], p
+					points.append(0) 
 			loc[vname] = points
 		return
 				
