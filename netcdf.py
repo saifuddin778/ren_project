@@ -1,4 +1,4 @@
-import sys, os, ast, json
+import sys, os, ast, json, gc
 import numpy as np
 from netCDF4 import Dataset
 
@@ -27,13 +27,13 @@ class netcdf(object):
 	def read_data(self, filepath):
 		df = Dataset(filepath, 'r')
 		print df.variables.keys()
+		gc.collect()
+		df.sync()
 		# Extract data from NetCDF file
-		lats = df.variables['lat'][:]  # extract/copy the data
-		lons = df.variables['lon'][:]
-		time = df.variables['time'][:]
-		tas = df.variables['tas'][]  # shape is time, lat, lon as shown above
-		
-
+		temp = df.variables['tas'][1,1,1]
+		#lat_idx = np.where(lat==50)[0][0]
+		#lon_idx = np.where(lon==270)[0][0]
+		#tmp_crd = temp[:,lat_idx,lon_idx]		
 
 if __name__ == '__main__':
 	obj = netcdf()
