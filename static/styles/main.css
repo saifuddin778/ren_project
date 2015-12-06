@@ -1,0 +1,166 @@
+body {
+	margin: 0;
+	font-family: monospace !important;
+}
+
+#header {
+	width: 100%;
+	height: 50px;
+	text-align: left;
+	font-size: 22px;
+	padding-left: 10px;
+	background-color: #2574A9;
+	color: white;
+	line-height: 50px;
+}
+
+#button_container {
+	width: 90%;
+	height: 400px;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	background-color: #efefef;
+	display: block;
+}
+
+.block {
+	display: inline-block;
+	width: auto;
+	height: 10%;
+	border-radius: 2px;
+	background-color: #2574A9;
+	margin-top: 14%;
+	font-size: 25px;
+	text-align: center;
+	padding: 20px;
+	line-height: 50px;
+	margin-left: auto;
+	margin-right: auto;
+	color: white;
+	cursor: pointer;
+}
+
+.block:hover {
+	color: lightblue;
+}
+
+.tool_container {
+	width: 90%;
+	height: auto;
+	min-height: 500px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: white;
+	position: relative;
+	display: none;
+}
+
+.tool_header {
+	height: 40px;
+	width: 100%;
+	display: block;
+	padding-top: 18px;
+	background-color: rgb(242, 242, 242);
+	text-align: center;
+}
+
+.selector_in {
+	display: inline-block;
+	width: 250px;
+	height: auto;
+}
+
+.button_in {
+	display: inline-block;
+	height: 20px;
+	width: 99px;
+	background-color: darkseagreen;
+	vertical-align: sub;
+	border-radius: 3px;
+	padding: 4px;
+	font-size: 15px;
+	cursor: pointer;
+}
+
+.ms-parent {
+	vertical-align: text-top !important;
+	width: 220px !important;
+}
+
+.ms-choice{
+	width: 220px !important;
+	text-align: center;
+}
+
+.ms-drop {
+	width: 220px !important;
+	text-align: left !important;
+	font-size: 13px !important;
+	font-family: monospace;
+}
+
+#heatmap_containers {
+	width: 90%;
+	height: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: none;
+	position: relative;
+	display: none;
+}
+
+
+#heatmap_container_buttons {
+	height: 30px;
+	width: 100%;
+	display: block;
+	padding-top: 5px;
+	text-align: center;
+	margin-left: 3px;
+}
+
+.heatmap_button {
+	width: 124px;
+	height: 25px;
+	display: inline-block;
+	line-height: 25px;
+	font-size: 12px;
+	color: white;
+	background-color: #2574A9;
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	text-align: center;
+	cursor: pointer;
+}
+
+#heatmap_container_plots {
+	height: 90%;
+	width: 100%;
+	text-align: center;
+	text-align: left;
+	margin-left: 3px;
+}
+
+.heatmap_plot {
+	width: 600px;
+	height: 500px;
+	margin-left: auto;
+	margin-right: auto;
+	color: black;
+	display: none;
+}
+
+.highcharts-button {
+	display: none !important;
+}
+
+/*#container {
+	height: 520px; 
+	min-width: 310px; 
+	width: 800px; 
+	margin: 0 auto; 
+	text-align:center; 
+	line-height: 520px;
+}*/

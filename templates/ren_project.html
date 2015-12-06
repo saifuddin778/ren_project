@@ -1,0 +1,83 @@
+<html>
+	<head>
+		<title>Renewable Energy Project - 2015</title>
+		<link  rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="{{ url_for('static', filename='env/multipleselect/multiple-select.js') }}"></script>
+		<link  rel="stylesheet" href="{{ url_for('static', filename='env/multipleselect/multiple-select.css') }}">
+		<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+		<script src="https://code.highcharts.com/maps/modules/data.js"></script>
+		<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/mapdata/countries/us/us-all-all.js"></script>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="{{ url_for('static', filename='scripts/ren_project.js') }}"></script>
+
+		<div id='header'>RE Course Project - 2015</div>
+	</head>
+
+	<body>
+		<div id='button_container'>
+			<div id='heatmap' class='block'>HEATMAP TOOL</div>
+			<div id='time_series' class='block'>TIME SERIES</div>
+		</div>
+
+		<div id='heatmap_tool' class='tool_container'>
+				<div id='heatmap_tool_header' class='tool_header'>
+					<div class='selector_in'>
+						<select id='heatmap_tool_pv_panel_select' multiple='multiple'>
+							<option value="pv_1">Yinglee YGE-U72</option>
+							<option value="pv_2">Kyocera KD325GX-LFB</option>
+							<option value="pv_3">Sunmodule Plus SW 280 Mono</option>
+						</select>
+					</div>
+
+					<div class='selector_in'>
+						<select id='heatmap_tool_year_window_select' multiple='multiple'>
+							<option value="2005_2015">Years 2005-2015</option>
+							<option value="2035_2064">Years 2035-2064</option>
+							<option value="2060_2089">Years 2060-2089</option>
+						</select>
+					</div>
+
+					<div class='selector_in'>
+						<select id='heatmap_tool_month_select' multiple='multiple'>
+							<option value="0">January</option>
+							<option value="1">Feabruary</option>
+							<option value="2">March</option>
+							<option value="4">April</option>
+							<option value="5">May</option>
+							<option value="6">June</option>
+							<option value="7">July</option>
+							<option value="8">August</option>
+							<option value="9">September</option>
+							<option value="10">October</option>
+							<option value="11">November</option>
+							<option value="12">December</option>
+						</select>
+					</div>
+
+					<div id='heatmap_tool_submit' class='button_in'>Submit</div>
+
+				</div>
+
+				<div id='heatmap_containers'>
+					<div id='heatmap_container_buttons'>
+						<div id='voc_button' class='heatmap_button'><i>Voc</i></div>
+						<div id='isc_button' class='heatmap_button'><i>Isc</i></div>
+						<div id='pmax_button' class='heatmap_button'><i>Pmax</i></div>
+						<div id='solarradiation_button' class='heatmap_button'><i>Solar Radiation</i></div>
+						<div id='airtemperature_button' class='heatmap_button'><i>Air Temperature</i></div>
+					</div>
+
+					<div id='heatmap_container_plots'>
+						<div id='voc_plot' class='heatmap_plot'><i>Voc</i></div>
+						<div id='isc_plot' class='heatmap_plot'><i>Isc</i></div>
+						<div id='pmax_plot' class='heatmap_plot'><i>Pmax</i></div>
+						<div id='solarradiation_plot' class='heatmap_plot'><i>Solar Radiation</i></div>
+						<div id='airtemperature_plot' class='heatmap_plot'><i>Air Temperature</i></div>
+					</div>
+				</div>
+		</div>
+
+	</body>
+</html>

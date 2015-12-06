@@ -1,15 +1,21 @@
-import sys, os, ast, json, gc
+import sys, os, ast, json
 import numpy as np
 from netCDF4 import Dataset, num2date
-import pylab as pl
-import matplotlib.pyplot as plt
 
+from location_data.raw_locations import raw_locations
 
 class netcdf(object):
 	def __init__(self):
-		self.data_dir = '../location_data/'
+		self.data_dir = '../location_data/data/'
 		self.coordinates_file = 'location_data/locations_R1.json' 
 		self.coordinates = self.read_coordinates()
+
+	def convert_raw_locs(self):
+		self.code_map = {}
+		for each in raw_locations:
+			name = each['name'].replace('County', '').replace('Municipio', '')
+			self.code_map [name] = each['code']
+		return
 
 	def aggregate_coords_data(self):
 		"""
@@ -23,10 +29,9 @@ class netcdf(object):
 			for filename in files:
 				splitted = filename.split('.')
 				if len(splitted) > 1 and splitted[1] == 'nc':
-					print filename
-					var_name = variables[filename.split('_')[0]]
+					var_name = variables[filename.split('2')[0]]
 					filepath = os.path.join(root, filename)
-					self.read_data(filepath, var_name)
+					self.read_data(filepath, var_name, filename.split('nc')[0].strip('.'))
 		self.save_data()
 		return
 
@@ -49,25 +54,19 @@ class netcdf(object):
 		coordinates = ast.literal_eval(coordinates[0])
 		return coordinates
 
-	def read_data(self, filepath, vname):
-		
+	def read_data(self, filepath, vname, filename):
 		for loc in self.coordinates:
 			loni = loc['lon']
 			lati = loc['lat']
 
-			#loni = -97.69
-			#lati = 31.85
-
 			nc = Dataset(filepath, 'r')
 			lat = nc.variables['latitude'][:]
 			lon = nc.variables['longitude'][:]
-
-			times = nc.variables['time']
+			times = nc.variables['time'][:]
 
 			ix = self.near(lon, loni)
 			iy = self.near(lat, lati)
 
-			#vname = 'AirTemperature'
 			var = nc.variables[vname]
 			h = var[:,iy,ix]
 			points = []
@@ -77,17 +76,18 @@ class netcdf(object):
 					#print float(i), loc['name']
 					points.append(float(i))
 				else:
-					print loc['name'], p
-					points.append(0) 
-			loc[vname] = points
+					#print loc['name'], p
+					points.append(0)
+			#loc[vname] = points
+			#loc[filename][vname] = points
+			loc[filename] = points
+			loc['code'] = self.code_map[loc['name']]
 		return
-				
 		"""
 			# for u in i.data:
 			# 	#u = list(u)
 			# 	#print filter(lambda n: n != -9999.0, u)
 		"""
-		
 		
 		# df = Dataset(filepath, 'r')
 		# temp = df.variables['AirTemperature']
@@ -103,21 +103,14 @@ class netcdf(object):
 		lat = df.variables['latitude'][:]
 		lon = df.variables['longitude'][:]
 		temp = df.variables['AirTemperature'][:,:,:]
-			
+		
 		lat_idx = np.where(lat==lat[20])[0][0]
 		lon_idx = np.where(lon==lon[12])[0][0]
 		tmp_crd = temp[:,lat_idx,lon_idx]
 		print set(tmp_crd.data)
 		"""
-		
 
 if __name__ == '__main__':
 	obj = netcdf()
+	obj.convert_raw_locs()
 	obj.aggregate_coords_data()
-
-		
-		
-
-	
-
-
