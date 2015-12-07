@@ -95,13 +95,13 @@ body {
 }
 
 .ms-drop {
-	width: 220px !important;
+	width: 220px;
 	text-align: left !important;
-	font-size: 13px !important;
+	font-size: 11px !important;
 	font-family: monospace;
 }
 
-#heatmap_containers {
+#heatmap_containers, #timeseries_containers {
 	width: 90%;
 	height: 1000px;
 	margin-left: auto;
@@ -112,7 +112,7 @@ body {
 }
 
 
-#heatmap_container_buttons {
+#heatmap_container_buttons, #timeseries_container_buttons {
 	height: 30px;
 	width: 100%;
 	display: block;
@@ -121,7 +121,7 @@ body {
 	margin-left: 3px;
 }
 
-.heatmap_button {
+.heatmap_button, .timeseries_button {
 	width: 124px;
 	height: 25px;
 	display: inline-block;
@@ -135,7 +135,7 @@ body {
 	cursor: pointer;
 }
 
-#heatmap_container_plots {
+#heatmap_container_plots, #timeseries_container_plots {
 	height: 90%;
 	width: 100%;
 	text-align: center;
@@ -143,7 +143,7 @@ body {
 	margin-left: 3px;
 }
 
-.heatmap_plot {
+.heatmap_plot, .timeseries_plot {
 	width: 600px;
 	height: 500px;
 	margin-left: auto;

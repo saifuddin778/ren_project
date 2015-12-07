@@ -3,7 +3,7 @@ from bson import ObjectId
 from flask import Flask, request, render_template
 
 from mongo_ import get_data_key as get
-from data_objects import heatmap_object
+from data_objects import heatmap_object, timeseries_object
 
 app = Flask(__name__)
 app.debug = True
@@ -33,6 +33,12 @@ def get_data_key():
 def get_heatmap_data():
 	response = heatmap_object(request.args).get_month_data()
 	return JSONEncoder().encode(response)
+
+@app.route('/get_timeseries_data/')
+def get_timeseries_data():
+	response = timeseries_object(request.args).get_timeseries_data()
+	return JSONEncoder().encode(response)
+
 
 
 if __name__ == '__main__':

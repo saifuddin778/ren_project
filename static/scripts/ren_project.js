@@ -34,6 +34,7 @@ function activate_clicks (){
 
 
 function activate_functions(tool_id){
+    console.log(tool_id);
     var functions_mapper = {heatmap_tool: {
             heatmap_tool_pv_panel_select: function (){
                 $('#heatmap_tool_pv_panel_select').multipleSelect({single: true});
@@ -59,6 +60,32 @@ function activate_functions(tool_id){
                     get_data(obj_);
                 });
             }
+        },
+        timeseries_tool: {
+            timeseries_tool_pv_panel_select: function (){
+                $('#timeseries_tool_pv_panel_select').multipleSelect({single: true});
+            },
+            timeseries_tool_year_window_select: function(){
+                $('#timeseries_tool_year_window_select').multipleSelect({single: true});
+            },
+            timeseries_tool_location_select: function(){
+                $('#timeseries_tool_location_select').multipleSelect({single: true});
+            }, 
+            timeseries_tool_submit: function(){
+                $('#timeseries_tool_submit').unbind('click').bind('click', function(){
+                    var pv_panel_selected = $('#timeseries_tool_pv_panel_select').multipleSelect('getSelects')[0];
+                    var year_window_selected = $('#timeseries_tool_year_window_select').multipleSelect('getSelects')[0];
+                    var location_selected = $('#timeseries_tool_location_select').multipleSelect('getSelects')[0];
+                    console.log('timeseries_selection', pv_panel_selected, year_window_selected);
+                    var obj_ = {
+                            type_: 'timeseries', 
+                            pv_panel_selected: pv_panel_selected,
+                            year_window_selected: year_window_selected,
+                            location_selected: location_selected,
+                            };
+                    get_data(obj_);
+                });
+            }
         }
     }
 
@@ -69,12 +96,17 @@ function activate_functions(tool_id){
 
 
 function get_data(object_){
-    var action_mapper = {heatmap: {route: '/get_heatmap_data/', callback: plot_heatmap }};
-    console.log(object_, action_mapper[object_.type_]);
+    var action_mapper = {
+                        heatmap: {route: '/get_heatmap_data/', callback: plot_heatmap },
+                        timeseries: {route: '/get_timeseries_data/', callback: plot_timeseries},
+                        };
 
-    $('#heatmap_containers').hide();
-    $('.heatmap_plot').empty();
-    $('.heatmap_button').css('background-color', '#2574A9');
+    console.log(object_, action_mapper[object_.type_]);
+    var key_ = object_.type_.split('_')[0];
+
+    $('#'+key_+'_containers').hide();
+    $('.'+key_+'_plot').empty();
+    $('.'+key_+'_button').css('background-color', '#2574A9');
 
     $.ajax({url: action_mapper[object_.type_].route,
             type:'GET',
@@ -84,6 +116,25 @@ function get_data(object_){
                 //console.log(resp);
                 action_mapper[object_.type_].callback(resp);
             }
+    });
+}
+
+function plot_timeseries(data){
+    console.log('timeseries data here', data);
+
+    $('#timeseries_containers').show();
+
+    $('.timeseries_button').unbind('click').bind('click', function(){
+        var button_id = this.id;
+        var variable_ = button_id.split('_')[0];
+        var plot_id = variable_+'_plot_ts';
+
+        console.log(button_id);
+        $('.timeseries_button').css('background-color', '#2574A9');
+        $('#'+button_id).css('background-color', 'darkseagreen');
+        $('.timeseries_plot').hide();
+        $('#'+plot_id).show();
+        main_ts(data, plot_id, variable_);
     });
 }
 
@@ -99,7 +150,7 @@ function plot_heatmap(data){
 
         var button_id = this.id;
         variable_ = button_id.split('_')[0];
-        var plot_id = variable_+'_plot';
+        var plot_id = variable_+'_plot_hm';
         $('.heatmap_button').css('background-color', '#2574A9');
         $('#'+button_id).css('background-color', 'darkseagreen');
         $('.heatmap_plot').hide();
@@ -122,14 +173,56 @@ function plot_heatmap(data){
 
         ranges = get_ranges(min_, max_);
         console.log(ranges, min_, max_);
-        main(plot_data, plot_id, ranges);
+        main_hm(plot_data, plot_id, ranges);
     });
     
 }
 
 
+function main_ts(data, plot_id, key_){
+    console.log(data, plot_id, key_);
+    console.log(data[0][key_]);
+    $('#'+plot_id).empty();
+    $('#'+plot_id).highcharts({
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Monthly Average Temperature'
+        },
+        subtitle: {
+            text: 'Source: WorldClimate.com'
+        },
+        xAxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        yAxis: {
+            title: {
+                text: 'Temperature (°C)'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: true
+            }
+        },
+        series: [{
+            name: 'London',
+            data: data[0][key_]//[3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+        }]
+    });
 
-function main(data, plot_id, ranges){
+
+    console.log(data, plot_id, key_, 'yes');
+}
+
+
+function main_hm(data, plot_id, ranges){
+    console.log(data, plot_id, ranges);
+    console.log('helpless');
     var naming_map = {
         'voc': {name: 'Voc', title: 'Open Circuit Voltage (Voc)', legend: 'Voc'},
         'isc': {name: 'Isc', title: 'Short Circuit Current (Isc)', legend: 'Isc'},
@@ -221,6 +314,7 @@ function main(data, plot_id, ranges){
 
     // Instanciate the map
     //$('#container').highcharts('Map', options);
+    console.log('#'+plot_id);
     $('#'+plot_id).empty();
     $('#'+plot_id).highcharts('Map', options);
 }

@@ -12,71 +12,128 @@
 		<script src="http://d3js.org/d3.v3.min.js"></script>
 		<script src="{{ url_for('static', filename='scripts/ren_project.js') }}"></script>
 
+		{% import 'locations_dd.html' as locations_dropdown %}
+
 		<div id='header'>RE Course Project - 2015</div>
 	</head>
 
 	<body>
 		<div id='button_container'>
 			<div id='heatmap' class='block'>HEATMAP TOOL</div>
-			<div id='time_series' class='block'>TIME SERIES</div>
+			<div id='timeseries' class='block'>TIME SERIES</div>
 		</div>
 
 		<div id='heatmap_tool' class='tool_container'>
-				<div id='heatmap_tool_header' class='tool_header'>
-					<div class='selector_in'>
-						<select id='heatmap_tool_pv_panel_select' multiple='multiple'>
-							<option value="pv_1">Yinglee YGE-U72</option>
-							<option value="pv_2">Kyocera KD325GX-LFB</option>
-							<option value="pv_3">Sunmodule Plus SW 280 Mono</option>
-						</select>
-					</div>
-
-					<div class='selector_in'>
-						<select id='heatmap_tool_year_window_select' multiple='multiple'>
-							<option value="2005_2015">Years 2005-2015</option>
-							<option value="2035_2064">Years 2035-2064</option>
-							<option value="2060_2089">Years 2060-2089</option>
-						</select>
-					</div>
-
-					<div class='selector_in'>
-						<select id='heatmap_tool_month_select' multiple='multiple'>
-							<option value="0">January</option>
-							<option value="1">Feabruary</option>
-							<option value="2">March</option>
-							<option value="4">April</option>
-							<option value="5">May</option>
-							<option value="6">June</option>
-							<option value="7">July</option>
-							<option value="8">August</option>
-							<option value="9">September</option>
-							<option value="10">October</option>
-							<option value="11">November</option>
-							<option value="12">December</option>
-						</select>
-					</div>
-
-					<div id='heatmap_tool_submit' class='button_in'>Submit</div>
-
+			<div id='heatmap_tool_header' class='tool_header'>
+				<div class='selector_in'>
+					<select id='heatmap_tool_pv_panel_select' multiple='multiple'>
+						<option value="pv_1">Yinglee YGE-U72</option>
+						<option value="pv_2">Kyocera KD325GX-LFB</option>
+						<option value="pv_3">Sunmodule Plus SW 280 Mono</option>
+					</select>
 				</div>
 
-				<div id='heatmap_containers'>
-					<div id='heatmap_container_buttons'>
-						<div id='voc_button' class='heatmap_button'><i>Voc</i></div>
-						<div id='isc_button' class='heatmap_button'><i>Isc</i></div>
-						<div id='pmax_button' class='heatmap_button'><i>Pmax</i></div>
-						<div id='solarradiation_button' class='heatmap_button'><i>Solar Radiation</i></div>
-						<div id='airtemperature_button' class='heatmap_button'><i>Air Temperature</i></div>
-					</div>
-
-					<div id='heatmap_container_plots'>
-						<div id='voc_plot' class='heatmap_plot'><i>Voc</i></div>
-						<div id='isc_plot' class='heatmap_plot'><i>Isc</i></div>
-						<div id='pmax_plot' class='heatmap_plot'><i>Pmax</i></div>
-						<div id='solarradiation_plot' class='heatmap_plot'><i>Solar Radiation</i></div>
-						<div id='airtemperature_plot' class='heatmap_plot'><i>Air Temperature</i></div>
-					</div>
+				<div class='selector_in'>
+					<select id='heatmap_tool_year_window_select' multiple='multiple'>
+						<option value="2005_2015">Years 2005-2015</option>
+						<option value="2035_2064">Years 2035-2064</option>
+						<option value="2060_2089">Years 2060-2089</option>
+					</select>
 				</div>
+
+				<div class='selector_in'>
+					<select id='heatmap_tool_month_select' multiple='multiple'>
+						<option value="0">January</option>
+						<option value="1">Feabruary</option>
+						<option value="2">March</option>
+						<option value="4">April</option>
+						<option value="5">May</option>
+						<option value="6">June</option>
+						<option value="7">July</option>
+						<option value="8">August</option>
+						<option value="9">September</option>
+						<option value="10">October</option>
+						<option value="11">November</option>
+						<option value="12">December</option>
+					</select>
+				</div>
+
+				<div id='heatmap_tool_submit' class='button_in'>Submit</div>
+
+			</div>
+
+			<div id='heatmap_containers'>
+				<div id='heatmap_container_buttons'>
+					<div id='voc_button_hm' class='heatmap_button'><i>Voc</i></div>
+					<div id='isc_button_hm' class='heatmap_button'><i>Isc</i></div>
+					<div id='pmax_button_hm' class='heatmap_button'><i>Pmax</i></div>
+					<div id='solarradiation_button_hm' class='heatmap_button'><i>Solar Radiation</i></div>
+					<div id='airtemperature_button_hm' class='heatmap_button'><i>Air Temperature</i></div>
+				</div>
+
+				<div id='heatmap_container_plots'>
+					<div id='voc_plot_hm' class='heatmap_plot'><i>Voc</i></div>
+					<div id='isc_plot_hm' class='heatmap_plot'><i>Isc</i></div>
+					<div id='pmax_plot_hm' class='heatmap_plot'><i>Pmax</i></div>
+					<div id='solarradiation_plot_hm' class='heatmap_plot'><i>Solar Radiation</i></div>
+					<div id='airtemperature_plot_hm' class='heatmap_plot'><i>Air Temperature</i></div>
+				</div>
+			</div>
+		</div>
+
+		<div id='timeseries_tool' class='tool_container'>
+			<div id='timeseries_tool_header' class='tool_header'>
+				<div class='selector_in'>
+					<select id='timeseries_tool_pv_panel_select' multiple='multiple'>
+						<option value="pv_1">Yinglee YGE-U72</option>
+						<option value="pv_2">Kyocera KD325GX-LFB</option>
+						<option value="pv_3">Sunmodule Plus SW 280 Mono</option>
+					</select>
+				</div>
+
+				<div class='selector_in'>
+					<select id='timeseries_tool_year_window_select' multiple='multiple'>
+						<option value="2005_2015">Years 2005-2015</option>
+						<option value="2035_2064">Years 2035-2064</option>
+						<option value="2060_2089">Years 2060-2089</option>
+					</select>
+				</div>
+
+				<!--div class='selector_in'>
+					{{ locations_dropdown }}
+				</div-->
+				<div class='selector_in'>
+					<select id='timeseries_tool_location_select'>
+						<option value='us-ny-061'>New York, NY</option>
+						<option value='us-nm-028'>Los Alamos , NM</option>
+						<option value='us-ny-081'>Queens, NY</option>
+						<option value='us-tx-225'>Houston , TX</option>
+						<option value='us-tx-175'>Goliad , TX</option>
+						<option value='us-fl-015'>Charlotte , FL</option>
+						<option value='us-ct-009'>New Haven , CT</option>
+					</select>
+				</div>
+
+				<div id='timeseries_tool_submit' class='button_in'>Submit</div>
+			</div>
+
+			<div id='timeseries_containers'>
+				<div id='timeseries_container_buttons'>
+					<div id='voc_button_tm' class='timeseries_button'><i>Voc</i></div>
+					<div id='isc_button_tm' class='timeseries_button'><i>Isc</i></div>
+					<div id='pmax_button_tm' class='timeseries_button'><i>Pmax</i></div>
+					<div id='solarradiation_button_tm' class='timeseries_button'><i>Solar Radiation</i></div>
+					<div id='airtemperature_button_tm' class='timeseries_button'><i>Air Temperature</i></div>
+				</div>
+
+				<div id='timeseries_container_plots'>
+					<div id='voc_plot_ts' class='timeseries_plot'><i>Voc</i></div>
+					<div id='isc_plot_ts' class='timeseries_plot'><i>Isc</i></div>
+					<div id='pmax_plot_ts' class='timeseries_plot'><i>Pmax</i></div>
+					<div id='solarradiation_plot_ts' class='timeseries_plot'><i>Solar Radiation</i></div>
+					<div id='airtemperature_plot_ts' class='timeseries_plot'><i>Air Temperature</i></div>
+				</div>
+			</div>
 		</div>
 
 	</body>
