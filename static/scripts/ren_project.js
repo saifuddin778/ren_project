@@ -6,6 +6,32 @@ $(document).ready(function(){
 
 function get_ranges(min_, max_){
     var colors_palette = d3.scale.category20c();
+    var colors = ['#00BFB6', 'lightblue', 'green', 'rgb(247, 224, 115)', '#72D200', 'burlywood', 'tomato', 'darkorange', '#E13800', '#E5000A'];
+    //'color': colors_palette(1-min_)
+    var all_ = [{'from': min_}];
+    var k = 0;
+    var delta = max_-min_;
+    var steps = 8;
+    var b = Math.round( delta/steps * 100) / 100; //javascript rounding is weird..mult and div by 100..else its just delta/steps.
+    while (k < delta){
+        k += b;
+        if ((min_+k) < max_){
+            all_.push({'from': min_+k});
+            //'color': colors_palette(1-(min_+k))
+        }
+    }
+
+    console.log(all_, 'here is the light');
+
+    for (u_ in all_){
+        all_[u_]['color'] = colors[u_];
+    }
+    return all_;
+}
+
+
+function get_ranges2(min_, max_){
+    var colors_palette = d3.scale.category20c();
     var all_ = [{'from': min_, 'color': colors_palette(1-min_)}];
     var k = 0;
     var delta = max_-min_;
@@ -17,6 +43,7 @@ function get_ranges(min_, max_){
             all_.push({'from': min_+k, 'color': colors_palette(1-(min_+k))});
         }
     }
+
     return all_;
 }
 
@@ -69,19 +96,19 @@ function activate_functions(tool_id){
                 $('#timeseries_tool_year_window_select').multipleSelect({single: true});
             },
             timeseries_tool_location_select: function(){
-                $('#timeseries_tool_location_select').multipleSelect({single: true});
+                $('#timeseries_tool_location_select').multipleSelect({single: false, filter: true});
             }, 
             timeseries_tool_submit: function(){
                 $('#timeseries_tool_submit').unbind('click').bind('click', function(){
                     var pv_panel_selected = $('#timeseries_tool_pv_panel_select').multipleSelect('getSelects')[0];
                     var year_window_selected = $('#timeseries_tool_year_window_select').multipleSelect('getSelects')[0];
-                    var location_selected = $('#timeseries_tool_location_select').multipleSelect('getSelects')[0];
-                    console.log('timeseries_selection', pv_panel_selected, year_window_selected);
+                    var locations_selected = $('#timeseries_tool_location_select').multipleSelect('getSelects');
+                    console.log('timeseries_selection', pv_panel_selected, year_window_selected, locations_selected);
                     var obj_ = {
                             type_: 'timeseries', 
                             pv_panel_selected: pv_panel_selected,
                             year_window_selected: year_window_selected,
-                            location_selected: location_selected,
+                            locations_selected: JSON.stringify(locations_selected),
                             };
                     get_data(obj_);
                 });
@@ -147,6 +174,8 @@ function plot_heatmap(data){
         var variable_;
         var min_ = Number.POSITIVE_INFINITY;
         var max_ = Number.NEGATIVE_INFINITY;
+        var min_loc = null;
+        var max_loc = null;
 
         var button_id = this.id;
         variable_ = button_id.split('_')[0];
@@ -157,23 +186,28 @@ function plot_heatmap(data){
         $('#'+plot_id).show();
 
         var plot_data = [];
+        var all_ = 0;
         for (var i=0; i<data.length; i++){
             var k = data[i];
             var var_val =  k[variable_];
             k['value'] = var_val
             if (var_val > max_){
                 max_ = var_val;
+                max_loc = k['name'];
+
             }
             if (var_val < min_){
                 min_ = var_val;
+                min_loc = k['name'];
             }
-
+            all_ += var_val;
             plot_data.push(k);
         }
 
         ranges = get_ranges(min_, max_);
         console.log(ranges, min_, max_);
-        main_hm(plot_data, plot_id, ranges);
+
+        main_hm(plot_data, plot_id, ranges, min_, max_, all_/plot_data.length, max_loc, min_loc);
     });
     
 }
@@ -181,54 +215,82 @@ function plot_heatmap(data){
 
 function main_ts(data, plot_id, key_){
     console.log(data, plot_id, key_);
-    console.log(data[0][key_]);
+    
+    var series_data = [];
+    var colors_palette = d3.scale.category20();
+    var categories = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    for (var i_=0; i_<data.length; i_++){
+        series_data.push(
+            {name: data[i_].name, data: data[i_][key_], color: colors_palette(i_) }
+            )
+    }
+
+    var unit_map = {'pmax': ' W', 'voc': ' V', 'isc': ' A', 'solarradiation': ' kW/m^2', 'airtemperature': ' Celsius'}
+
     $('#'+plot_id).empty();
     $('#'+plot_id).highcharts({
         chart: {
             type: 'line'
         },
+        credits: {enabled: false},
         title: {
-            text: 'Monthly Average Temperature'
+            text: key_
         },
         subtitle: {
-            text: 'Source: WorldClimate.com'
+            text: ''
         },
         xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            categories: categories
         },
         yAxis: {
             title: {
-                text: 'Temperature (°C)'
-            }
+                text: key_ +'('+ unit_map[key_] + ')'
+            },
+            labels: {
+                formatter: function(){
+                    return this.value;
+                }
+            },
+            gridLineWidth: 1,
+            gridLineDashStyle: 'Dash'
         },
         plotOptions: {
             line: {
                 dataLabels: {
-                    enabled: true
+                    enabled: false,
+                    formatter: function(){
+                        return Math.round(this.y * 100 / 100);
+                    }
                 },
                 enableMouseTracking: true
             }
         },
-        series: [{
-            name: 'London',
-            data: data[0][key_]//[3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-        }]
+        tooltip: {
+            formatter: function(){
+                return '<b> ('+ this.series.name +') '+ categories[this.series.data.indexOf(this.point)] +'</b>: '+ Highcharts.numberFormat(this.y, 2) + unit_map[key_];
+            }
+        },
+        series: series_data
+        // series: [{
+        //     name: key_,
+        //     data: data[0][key_]
+        // }]
     });
-
-
+    
     console.log(data, plot_id, key_, 'yes');
 }
 
 
-function main_hm(data, plot_id, ranges){
+function main_hm(data, plot_id, ranges, min_, max_, avg, max_loc, min_loc){
     console.log(data, plot_id, ranges);
     console.log('helpless');
     var naming_map = {
-        'voc': {name: 'Voc', title: 'Open Circuit Voltage (Voc)', legend: 'Voc'},
-        'isc': {name: 'Isc', title: 'Short Circuit Current (Isc)', legend: 'Isc'},
-        'pmax': {name: 'Pmax', title: 'Power Max (Voc) - W', legend: 'Pmax'},
-        'solarradiation': {name: 'SRad', title: 'Solar Radiation - ', legend: 'SRad'},
-        'airtemperature': {name: 'AirTemp', title: 'Air Temperature - ', legend: 'AirTemp'},
+        'voc': {name: 'Voc', title: 'Open Circuit Voltage (Voc) ->', legend: 'Voc', 'unit': ' V'},
+        'isc': {name: 'Isc', title: 'Short Circuit Current (Isc) ->', legend: 'Isc', 'unit': 'I'},
+        'pmax': {name: 'Pmax', title: 'Power Max (Voc) - W', legend: 'Pmax', 'unit': ' W'},
+        'solarradiation': {name: 'SRad', title: 'Solar Radiation ->', legend: 'SRad', 'unit': ' kW/m^2'},
+        'airtemperature': {name: 'AirTemp', title: 'Air Temperature ->', legend: 'AirTemp', 'unit': ' Celcius'},
     };
 
     var ident = plot_id.split('_')[0];
@@ -251,7 +313,7 @@ function main_hm(data, plot_id, ranges){
         },
         credits: {enabled: false},
         title: {
-            text: naming_map[ident].title
+            text: naming_map[ident].title + ' ' + naming_map[ident].unit
         },
 
         legend: {
@@ -277,21 +339,32 @@ function main_hm(data, plot_id, ranges){
         colorAxis: {
             dataClasses: ranges
         },
+        tooltip: {
+             pointFormat: '{point.name}.: <b>{point.value:.1f} '+naming_map[ident]['unit']+'</b><br/>'
+        },
 
         plotOptions: {
             mapline: {
                 showInLegend: false,
                 enableMouseTracking: false
-            }
+            },
         },
 
         series: [{
             mapData: countiesMap,
             data: data,
             joinBy: ['hc-key', 'code'],
+            dataLabels: {
+                enabled: false,
+                color: '#FFFFFF',
+                format: '{point.state}'
+            },
             name: naming_map[ident].name,
             tooltip: {
-                valueSuffix: ''
+                valueSuffix: '',
+                formatter: function(){
+                    console.log(this);
+                }
             },
             borderWidth: 0.5,
             states: {
@@ -312,9 +385,14 @@ function main_hm(data, plot_id, ranges){
         }]
     };
 
-    // Instanciate the map
-    //$('#container').highcharts('Map', options);
+    // Instantiate the map
     console.log('#'+plot_id);
     $('#'+plot_id).empty();
     $('#'+plot_id).highcharts('Map', options);
+
+    $('#hm_min').text('MIN --> '+Math.round(min_ * 100)/100 + ' ('+min_loc+')');
+    $('#hm_max').text('MAX --> '+Math.round(max_ * 100)/100 + ' ('+max_loc+')');
+    $('#hm_avg').text('AVG --> '+Math.round(avg * 100)/100);
+
+
 }

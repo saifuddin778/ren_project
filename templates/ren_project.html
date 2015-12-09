@@ -14,7 +14,7 @@
 
 		{% import 'locations_dd.html' as locations_dropdown %}
 
-		<div id='header'>RE Course Project - 2015</div>
+		<div id='header'><a href='/ren_project/'>RE Course Project - 2015</a></div>
 	</head>
 
 	<body>
@@ -44,7 +44,7 @@
 				<div class='selector_in'>
 					<select id='heatmap_tool_month_select' multiple='multiple'>
 						<option value="0">January</option>
-						<option value="1">Feabruary</option>
+						<option value="1">February</option>
 						<option value="2">March</option>
 						<option value="4">April</option>
 						<option value="5">May</option>
@@ -78,6 +78,10 @@
 					<div id='solarradiation_plot_hm' class='heatmap_plot'><i>Solar Radiation</i></div>
 					<div id='airtemperature_plot_hm' class='heatmap_plot'><i>Air Temperature</i></div>
 				</div>
+
+				<div id='hm_min' class='stats'></div>
+				<div id='hm_max' class='stats'></div>
+				<div id='hm_avg' class='stats'></div>
 			</div>
 		</div>
 
@@ -99,11 +103,8 @@
 					</select>
 				</div>
 
-				<!--div class='selector_in'>
-					{{ locations_dropdown }}
-				</div-->
 				<div class='selector_in'>
-					<select id='timeseries_tool_location_select'>
+					<!--select id='timeseries_tool_location_select'>
 						<option value='us-ny-061'>New York, NY</option>
 						<option value='us-nm-028'>Los Alamos , NM</option>
 						<option value='us-ny-081'>Queens, NY</option>
@@ -111,7 +112,10 @@
 						<option value='us-tx-175'>Goliad , TX</option>
 						<option value='us-fl-015'>Charlotte , FL</option>
 						<option value='us-ct-009'>New Haven , CT</option>
-					</select>
+						<option value='us-az-027'>Yuma, AZ</option>
+						<option value='us-al-071'>Jackson, AL</option>
+					</select-->
+					{{ locations_dropdown }}
 				</div>
 
 				<div id='timeseries_tool_submit' class='button_in'>Submit</div>

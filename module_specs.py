@@ -1,6 +1,6 @@
 import random
 
-module_globals = { 'gamma': random.sample(range(25, 31), 1)[0] }
+module_globals = { 'gamma': 37}#random.sample(range(25, 31), 1)[0] }
 
 modules  = {
 	'pv_1': {

@@ -3,6 +3,8 @@ body {
 	font-family: monospace !important;
 }
 
+a {text-decoration: none; color: white;}
+
 #header {
 	width: 100%;
 	height: 50px;
@@ -136,7 +138,7 @@ body {
 }
 
 #heatmap_container_plots, #timeseries_container_plots {
-	height: 90%;
+	height: 53%;
 	width: 100%;
 	text-align: center;
 	text-align: left;
@@ -144,7 +146,7 @@ body {
 }
 
 .heatmap_plot, .timeseries_plot {
-	width: 600px;
+	width: 100%;
 	height: 500px;
 	margin-left: auto;
 	margin-right: auto;
@@ -154,6 +156,14 @@ body {
 
 .highcharts-button {
 	display: none !important;
+}
+
+.stats {
+	text-align: center;
+    font-size: 14px;
+    color: black;
+    font-weight: bold;
+    margin-bottom: 4px;
 }
 
 /*#container {
