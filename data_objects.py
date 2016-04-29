@@ -17,7 +17,7 @@ class heatmap_object(object):
 		t1 = tm()
 		keys = map(lambda p: p+self.year_window_selected, ['solarradiation', 'airtemperature'])
 		client = establish_connection()
-		res = client.test_.ren_project_data.find(
+		res = client.renewable_energy_2015.test_.find(
 				{'key': { '$in': keys } }, 
 				{ 'data': { '$slice': [self.month_selected-1,  1] } }
 			)
@@ -71,14 +71,12 @@ class timeseries_object(object):
 		self.codes = ast.literal_eval(object_['locations_selected'])
 
 	def get_timeseries_data(self):
-		
 		t1 = tm()
 		keys = map(lambda p: p+self.year_window_selected, ['solarradiation', 'airtemperature'])
 		client = establish_connection()
-		res = client.test_.ren_project_data.find(
+		res = client.renewable_energy_2015.test_.find(
 				{'key': { '$in': keys }, 'code': {'$in': self.codes}}, 
 			)
-		#data = self.map_([each for each in res], keys).values()
 		data = self.map_([each for each in res], keys).values()
 		client.close()
 		t2 = tm()
@@ -86,9 +84,7 @@ class timeseries_object(object):
 		return data
 
 	def map_(self, data, keys):
-
 		mapped = {}
-		
 		for each in data:
 			id_ = each['code']
 			key = each['key']
