@@ -226,7 +226,7 @@ function main_ts(data, plot_id, key_){
             )
     }
 
-    var unit_map = {'pmax': ' W', 'voc': ' V', 'isc': ' A', 'solarradiation': ' kW/m^2', 'airtemperature': ' Celsius'}
+    var unit_map = {'pmax': ' W', 'voc': ' V', 'isc': ' A', 'solarradiation': ' W/m^2', 'airtemperature': ' Celsius'}
 
     $('#'+plot_id).empty();
     $('#'+plot_id).highcharts({
@@ -289,7 +289,7 @@ function main_hm(data, plot_id, ranges, min_, max_, avg, max_loc, min_loc){
         'voc': {name: 'Voc', title: 'Open Circuit Voltage (Voc) ->', legend: 'Voc', 'unit': ' V'},
         'isc': {name: 'Isc', title: 'Short Circuit Current (Isc) ->', legend: 'Isc', 'unit': 'I'},
         'pmax': {name: 'Pmax', title: 'Power Max (Voc) - W', legend: 'Pmax', 'unit': ' W'},
-        'solarradiation': {name: 'SRad', title: 'Solar Radiation ->', legend: 'SRad', 'unit': ' kW/m^2'},
+        'solarradiation': {name: 'SRad', title: 'Solar Radiation ->', legend: 'SRad', 'unit': ' W/m^2'},
         'airtemperature': {name: 'AirTemp', title: 'Air Temperature ->', legend: 'AirTemp', 'unit': ' Celcius'},
     };
 

@@ -73,42 +73,13 @@ class netcdf(object):
 			for _, i in enumerate(h):
 				p = np.isnan(float(i))
 				if not p:
-					#print float(i), loc['name']
 					points.append(float(i))
 				else:
-					#print loc['name'], p
 					points.append(0)
-			#loc[vname] = points
-			#loc[filename][vname] = points
+
 			loc[filename] = points
 			loc['code'] = self.code_map[loc['name']]
-		return
-		"""
-			# for u in i.data:
-			# 	#u = list(u)
-			# 	#print filter(lambda n: n != -9999.0, u)
-		"""
-		
-		# df = Dataset(filepath, 'r')
-		# temp = df.variables['AirTemperature']
-		# for i in range(len(temp)):
-		# 	pl.clf()
-		# 	pl.contourf(temp[i])
-		# 	pl.show()
 
-		"""
-		df = Dataset(filepath, 'r')
-
-		# Extract data from NetCDF file
-		lat = df.variables['latitude'][:]
-		lon = df.variables['longitude'][:]
-		temp = df.variables['AirTemperature'][:,:,:]
-		
-		lat_idx = np.where(lat==lat[20])[0][0]
-		lon_idx = np.where(lon==lon[12])[0][0]
-		tmp_crd = temp[:,lat_idx,lon_idx]
-		print set(tmp_crd.data)
-		"""
 
 if __name__ == '__main__':
 	obj = netcdf()

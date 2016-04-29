@@ -5,7 +5,8 @@ from pymongo import MongoClient
 from bson import ObjectId
 
 def establish_connection():
-	client = MongoClient('localhost')
+	remote_db_uri = 'mongodb://renewable_energy_2015:123456abcd@ds017231.mlab.com:17231/renewable_energy_2015'
+	client = MongoClient(remote_db_uri)
 	return client
 
 
@@ -47,7 +48,7 @@ def ingest_():
 	data = read_data()
 	clean_data = mapped_data(data)
 	for each in clean_data:
-		client.test_.ren_project_data.save(each)
+		client.renewable_energy_2015.test_.save(each)
 	return
 
 def get_data_key(key):
@@ -62,4 +63,3 @@ def get_data_key(key):
 		data.append(a)
 	client.close()
 	return data
-
