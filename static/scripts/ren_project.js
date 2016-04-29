@@ -7,7 +7,6 @@ $(document).ready(function(){
 function get_ranges(min_, max_){
     var colors_palette = d3.scale.category20c();
     var colors = ['#00BFB6', 'lightblue', 'green', 'rgb(247, 224, 115)', '#72D200', 'burlywood', 'tomato', 'darkorange', '#E13800', '#E5000A'];
-    //'color': colors_palette(1-min_)
     var all_ = [{'from': min_}];
     var k = 0;
     var delta = max_-min_;
@@ -17,11 +16,8 @@ function get_ranges(min_, max_){
         k += b;
         if ((min_+k) < max_){
             all_.push({'from': min_+k});
-            //'color': colors_palette(1-(min_+k))
         }
     }
-
-    console.log(all_, 'here is the light');
 
     for (u_ in all_){
         all_[u_]['color'] = colors[u_];
@@ -135,12 +131,14 @@ function get_data(object_){
     $('.'+key_+'_plot').empty();
     $('.'+key_+'_button').css('background-color', '#2574A9');
 
+    $('#please_wait').show();
+
     $.ajax({url: action_mapper[object_.type_].route,
             type:'GET',
             data: object_,
             success: function(resp){
                 resp = JSON.parse(resp);
-                //console.log(resp);
+                $('#please_wait').hide();
                 action_mapper[object_.type_].callback(resp);
             }
     });
