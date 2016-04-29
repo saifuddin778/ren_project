@@ -1,0 +1,5 @@
+requests
+pymongo
+flask
+flask-script
+numpy
